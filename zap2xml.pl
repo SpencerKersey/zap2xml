@@ -591,6 +591,8 @@ sub printProgrammes {
       my $xs;
       my $xe;
 
+      $dd_prog_id = $p;
+
       if (defined($programs{$p}{seasonNum}) && defined($programs{$p}{episodeNum})) {
         my $s = $programs{$p}{seasonNum};
         my $sf = sprintf("S%0*d", &max(2, length($s)), $s);
@@ -603,9 +605,10 @@ sub printProgrammes {
         if ($s > 0 || $e > 0) {
           print $FH "\t\t<episode-num system=\"common\">" . $sf . $ef . "</episode-num>\n";
         }
+      } else {
+	print $FH "\t\t<episode-num system=\"common\">" . $dd_prog_id . "</episode-num>\n";
       }
 
-      $dd_prog_id = $p;
       if ( $dd_prog_id =~ /^(..\d{8})(\d{4})/ ) {
         $dd_prog_id = sprintf("%s.%s",$1,$2);
         print $FH "\t\t<episode-num system=\"dd_progid\">" . $dd_prog_id  . "</episode-num>\n";
@@ -613,6 +616,8 @@ sub printProgrammes {
 
       if (defined($xs) && defined($xe) && $xs >= 0 && $xe >= 0) {
         print $FH "\t\t<episode-num system=\"xmltv_ns\">" . $xs . "." . $xe . ".</episode-num>\n";
+      } else {
+	print $FH "\t\t<episode-num system=\"xmltv_ns\">" . $dd_prog_id . ".</episode-num>\n";
       }
 
       if (defined($schedule{$station}{$s}{quality})) {
